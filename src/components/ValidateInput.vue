@@ -51,7 +51,6 @@ const inputRef = reactive({
 const emit = defineEmits(['update:modelValue'])
 
 const updateValue = (e: KeyboardEvent) => {
-  console.log('(e.target as HTMLElement).nodeValue', (e.target as HTMLInputElement).value)
   const targetValue = (e.target as HTMLInputElement).value
   inputRef.val = targetValue
   emit('update:modelValue', targetValue)
@@ -60,7 +59,7 @@ const updateValue = (e: KeyboardEvent) => {
 // inheritAttrs: false
 //
 onMounted(() => {
-  emitter.emit('form-item-created', inputRef.val)
+  emitter.emit('form-item-created', validateInput)
 })
 
 // inheritAttrs

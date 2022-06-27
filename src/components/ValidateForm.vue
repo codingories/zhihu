@@ -14,31 +14,34 @@ import { defineComponent, defineEmits, defineProps, PropType, onUnmounted } from
 // 新建一个监听器
 import mitt from 'mitt'
 
-// type ValidateFunc = (test: string) => void
-// type Emits<EventType extends string | symbol, T> = {
-//   on (type: EventType, handler: (arg: T) => void): void
-//   off (type: EventType, handler: (arg: T) => void): void
-//   emit (type: EventType, arg: T): void
-// }
-// type Emitter = Emits<'form-item-created', ValidateFunc>
+type ValidateFunc = () => boolean
 
-// import { RulesProp } from '@/components/ValidateInput.vue'
-// :Emitter
 export const emitter = mitt()
 export default defineComponent({
   name: 'ValidateForm',
   emits: ['form-submit'],
   setup (props, context) {
+    let funcArr: ValidateFunc[] = []
     const submitForm = () => {
+      console.log('111111111')
       // 拿到内部验证并且出发事件，现mock
-      context.emit('form-submit', true)
+      // every, some会提前停止循环，every出现一个false最终结果就是false
+      // some是有一个是true就提前停止运行
+      // const result = funcArr.every(func => func())
+      console.log('funcArr', funcArr)
+      const result = funcArr.map(func => func()).every(result => result)
+
+      context.emit('form-submit', result)
     }
-    const callback = (test?: string) => {
-      console.log('test', test)
+    const callback = (func?: ValidateFunc) => {
+      if (func) {
+        funcArr.push(func)
+      }
     }
     emitter.on('form-item-created', callback)
     onUnmounted(() => {
       emitter.off('form-item-created', callback)
+      funcArr = []
     })
     return {
       submitForm

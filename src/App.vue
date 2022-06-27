@@ -9,8 +9,8 @@
         ></validate-input>
       </div>
       <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules" v-model="emailVal" placeholder="请输入邮箱地址" class="hi 222"></validate-input>
+        <label class="form-label">密码</label>
+        <validate-input :rules="passwordRules" v-model="passwordVal" placeholder="请输入密码"></validate-input>
       </div>
       <template #submit>
         <span class="btn btn-danger">Submit</span>
@@ -92,7 +92,7 @@ export default defineComponent({
   setup () {
     const inputRef = ref<any>(null)
 
-    const emailVal = ref('123@test.com')
+    const emailVal = ref('')
 
     const emailRules = [
       {
@@ -103,6 +103,14 @@ export default defineComponent({
         type: 'email',
         message: '请输入正确的电子邮箱格式'
       }]
+
+    const passwordVal = ref('')
+    const passwordRules = [
+      {
+        type: 'required',
+        message: '密码不能为空'
+      }
+    ]
 
     const emailRef = reactive({
       val: '',
@@ -120,6 +128,7 @@ export default defineComponent({
     }
     const onFormSubmit = (result: boolean) => {
       console.log('result', inputRef.value.validateInput())
+      console.log('result234', result)
     }
     return {
       // list: list,
@@ -129,7 +138,9 @@ export default defineComponent({
       emailRules,
       emailVal,
       onFormSubmit,
-      inputRef: inputRef
+      inputRef: inputRef,
+      passwordRules,
+      passwordVal
     }
   }
 
