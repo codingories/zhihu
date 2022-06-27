@@ -23,8 +23,8 @@
 <!--})-->
 <!--</script>-->
 <script lang="ts" setup>
-import { defineProps, PropType, reactive, defineEmits, ref, defineExpose } from 'vue'
-
+import { defineProps, PropType, reactive, defineEmits, ref, defineExpose, onMounted } from 'vue'
+import { emitter } from '@/components/ValidateForm.vue'
 // $attrs
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
@@ -59,6 +59,9 @@ const updateValue = (e: KeyboardEvent) => {
 
 // inheritAttrs: false
 //
+onMounted(() => {
+  emitter.emit('form-item-created', inputRef.val)
+})
 
 // inheritAttrs
 const validateInput = () => {

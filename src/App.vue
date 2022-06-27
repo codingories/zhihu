@@ -92,7 +92,7 @@ export default defineComponent({
   setup () {
     const inputRef = ref<any>(null)
 
-    const emailVal = ref('')
+    const emailVal = ref('123@test.com')
 
     const emailRules = [
       {
