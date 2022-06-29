@@ -58,7 +58,10 @@ const onFormSubmit = (result: boolean) => {
 
   if (result) {
     // console.log('result', result)
-    router.push('/')
+    router.push({
+      name: 'column',
+      params: { id: 1 }
+    })
   }
 }
 </script>
