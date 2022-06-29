@@ -54,9 +54,12 @@ const passwordRules: RulesProp = [
   }
 ]
 const onFormSubmit = (result: boolean) => {
-  if (result) {
-    console.log('result', result)
-  }
+  console.log('result', result)
+
+  // if (result) {
+  //   // console.log('result', result)
+  //   router.push('/')
+  // }
 }
 </script>
 <script lang="ts">
