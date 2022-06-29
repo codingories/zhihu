@@ -1,40 +1,18 @@
 <template>
-  <GlobalHeader :user="currentUser"></GlobalHeader>
   <div id="app" class="container">
-    <!--    <ColumnList :list="list"/>-->
-    <validate-form @form-submit="onFormSubmit">
-      <div class="mb-3">
-        <label class="form-label">邮箱地址</label>
-        <validate-input :rules="emailRules" v-model="emailVal" placeholder="请输入邮箱地址" ref="inputRef"
-        ></validate-input>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">密码</label>
-        <validate-input :rules="passwordRules" v-model="passwordVal" placeholder="请输入密码"></validate-input>
-      </div>
-      <template #submit>
-        <span class="btn btn-danger">Submit</span>
-      </template>
-    </validate-form>
-    <!--    <form>-->
-    <!--      <div class="mb-3">-->
-    <!--        <label class="form-label">邮箱地址</label>-->
-    <!--        <validate-input :rules="emailRules" v-model="emailVal" placeholder="请输入邮箱地址" class="hi 222"></validate-input>-->
-    <!--      </div>-->
-    <!--      <div class="mb-3">-->
-    <!--        <label for="exampleInputEmail1" class="form-label">邮箱地址</label>-->
-    <!--        <input-->
-    <!--          type="email" class="form-control" id="exampleInputEmail1"-->
-    <!--          v-model="emailRef.val"-->
-    <!--          @blur="validateEmail"-->
-    <!--        >-->
-    <!--        <div class="form-text" v-if="emailRef.error">{{ emailRef.message }}</div>-->
-    <!--      </div>-->
-    <!--      <div class="mb-3">-->
-    <!--        <label for="exampleInputPassword1" class="form-label">密码</label>-->
-    <!--        <input type="password" class="form-control" id="exampleInputPassword1">-->
-    <!--      </div>-->
-    <!--    </form>-->
+    <GlobalHeader :user="currentUser"></GlobalHeader>
+    <router-view></router-view>
+    <footer class="text-center py-4 text-secondary bg-light mt-6">
+      <small>
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">© 2020 者也专栏</li>
+          <li class="list-inline-item">课程</li>
+          <li class="list-inline-item">文档</li>
+          <li class="list-inline-item">联系</li>
+          <li class="list-inline-item">更多</li>
+        </ul>
+      </small>
+    </footer>
   </div>
 </template>
 
@@ -43,8 +21,8 @@ import { defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader from '@/components/GlobalHeader.vue'
-import ValidateInput from '@/components/ValidateInput.vue'
-import ValidateForm from '@/components/ValidateForm.vue'
+// import ValidateInput from '@/components/ValidateInput.vue'
+// import ValidateForm from '@/components/ValidateForm.vue'
 
 const currentUser = {
   isLogin: true,
@@ -84,8 +62,8 @@ const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 export default defineComponent({
   name: 'App',
   components: {
-    ValidateForm,
-    ValidateInput,
+    // ValidateForm,
+    // ValidateInput,
     GlobalHeader
     // ColumnList
   },
@@ -104,13 +82,11 @@ export default defineComponent({
         message: '请输入正确的电子邮箱格式'
       }]
 
-    const passwordVal = ref('')
     const passwordRules = [
       {
         type: 'required',
         message: '密码不能为空'
-      }
-    ]
+      }]
 
     const emailRef = reactive({
       val: '',
@@ -128,7 +104,6 @@ export default defineComponent({
     }
     const onFormSubmit = (result: boolean) => {
       console.log('result', inputRef.value.validateInput())
-      console.log('result234', result)
     }
     return {
       // list: list,
@@ -139,8 +114,7 @@ export default defineComponent({
       emailVal,
       onFormSubmit,
       inputRef: inputRef,
-      passwordRules,
-      passwordVal
+      passwordRules
     }
   }
 

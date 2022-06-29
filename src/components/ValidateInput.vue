@@ -24,17 +24,19 @@
 <!--</script>-->
 <script lang="ts" setup>
 import { defineProps, PropType, reactive, defineEmits, ref, defineExpose, onMounted } from 'vue'
-import { emitter } from '@/components/ValidateForm.vue'
+import { emitter } from '@/mitt/mitter'
+import { RulesProp } from '@/types/commonTypes'
+// import emitter from './ValidateForm.vue'
 // $attrs
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
-interface RuleProp {
-  type: 'required' | 'email';
-  message: string;
-}
-
-export type RulesProp = RuleProp[];
+// interface RuleProp {
+//   type: 'required' | 'email';
+//   message: string;
+// }
+//
+// type RulesProp = RuleProp[];
 
 const props = defineProps({
   rules: Array as PropType<RulesProp>,
@@ -62,7 +64,6 @@ onMounted(() => {
   emitter.emit('form-item-created', validateInput)
 })
 
-// inheritAttrs
 const validateInput = () => {
   if (props.rules) {
     const allPassed = props.rules.every(rule => {

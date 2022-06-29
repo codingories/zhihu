@@ -13,17 +13,16 @@
 import { defineComponent, defineEmits, defineProps, PropType, onUnmounted } from 'vue'
 // 新建一个监听器
 import mitt from 'mitt'
+import { emitter } from '@/mitt/mitter'
 
-type ValidateFunc = () => boolean
-
-export const emitter = mitt()
 export default defineComponent({
   name: 'ValidateForm',
   emits: ['form-submit'],
   setup (props, context) {
+    type ValidateFunc = () => boolean
+
     let funcArr: ValidateFunc[] = []
     const submitForm = () => {
-      console.log('111111111')
       // 拿到内部验证并且出发事件，现mock
       // every, some会提前停止循环，every出现一个false最终结果就是false
       // some是有一个是true就提前停止运行
@@ -46,12 +45,6 @@ export default defineComponent({
     return {
       submitForm
     }
-  },
-  mounted () {
-
-    // this.$on('item-created', () => {
-    //
-    // })
   }
 })
 
