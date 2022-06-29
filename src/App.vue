@@ -14,7 +14,6 @@
       </small>
     </footer>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -120,7 +119,6 @@ export default defineComponent({
   }
 
 })
-
 
 </script>
 
