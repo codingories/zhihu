@@ -1,18 +1,32 @@
 <template>
-  <h1>
-    ColumnDetail
-    <pre>{{route}}</pre>
-  </h1>
-
+  <div class="column-detail-page w-75 mx-auto">
+    <div class="column-info row mb-4 border-bottom pb-4 align-items-center" v-if="column">
+      <div class="col-3 text-center">
+        <img :src="column.avatar" :alt="column.title" class="rounded-circle border w-100">
+      </div>
+      <div class="col-9">
+        <h4>{{column.title}}</h4>
+        <p class="text-muted">{{column.description}}</p>
+      </div>
+    </div>
+    <post-list :list="list"></post-list>
+  </div>
 </template>
 
 <script lang="ts" setup>
-// 为了得到路由信息，我们需要使用useRoute
-
 import { useRoute } from 'vue-router'
+import { testData, testPosts } from '@/testData'
+import PostList from '@/components/PostList.vue'
 
 const route = useRoute()
+
+const currentId = +route.params.id
+// 拿到当前的column和当前的Post
+const column = testData.find(c => c.id === currentId)
+// 拿当前的posts
+const list = testPosts.filter(post => post.columnId === currentId)
 </script>
+
 <script lang="ts">
 export default {
   name: 'ColumnDetail'

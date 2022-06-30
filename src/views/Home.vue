@@ -24,33 +24,9 @@
 
 <script lang="ts" setup>
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
+import { testData } from '@/testData'
 
-const list: ColumnProps[] = [
-  {
-    id: 1,
-    title: 'test1的专栏',
-    description: '这是test1专栏',
-    avatar: 'https://www.baidu.com/img/flexible/logo/pc/result@2.png'
-  },
-  {
-    id: 2,
-    title: 'test2的专栏',
-    description: '这是test2专栏这是test2专栏这是test2专栏这是test2专栏这是test2专栏'
-    // avatar: 'https://www.baidu.com/img/flexible/logo/pc/result@2.png'
-  },
-  {
-    id: 3,
-    title: 'test3的专栏',
-    description: '这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏这是test3专栏',
-    avatar: 'https://cn.vuejs.org/images/logo.svg'
-  },
-  {
-    id: 4,
-    title: 'test4的专栏',
-    description: '这是test4专栏',
-    avatar: 'https://www.baidu.com/img/flexible/logo/pc/result@2.png'
-  }
-]
+const list = testData
 </script>
 
 <script lang="ts">
