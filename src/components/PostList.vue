@@ -18,8 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, PropType } from 'vue'
-import { RulesProp } from '@/types/commonTypes'
+import { defineProps, PropType } from 'vue'
 import { PostProps } from '@/testData'
 
 const props = defineProps(
