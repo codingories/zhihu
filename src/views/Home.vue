@@ -1,5 +1,6 @@
 <template>
   <div class="home-page">
+    <h2>{{ biggerColumnLen }}</h2>
     <section class="py-5 text-center container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
@@ -18,15 +19,21 @@
     <!--    >-->
     <!--      加载更多-->
     <!--    </button>-->
-
   </div>
 </template>
 
 <script lang="ts" setup>
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import { testData } from '@/testData'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+import { GlobalDataProps } from '@/store'
 
-const list = testData
+const store = useStore<GlobalDataProps>()
+const list = store.state.columns
+// const list = computed(() => store.state.columns)
+// const biggerColumnLen = computed(() => store.state.columns.filter(c => c.id > 2).length
+const biggerColumnLen = computed(() => store.getters.biggerColumnsLen)
 </script>
 
 <script lang="ts">

@@ -5,8 +5,8 @@
         <img :src="column.avatar" :alt="column.title" class="rounded-circle border w-100">
       </div>
       <div class="col-9">
-        <h4>{{column.title}}</h4>
-        <p class="text-muted">{{column.description}}</p>
+        <h4>{{ column.title }}</h4>
+        <p class="text-muted">{{ column.description }}</p>
       </div>
     </div>
     <post-list :list="list"></post-list>
@@ -17,14 +17,15 @@
 import { useRoute } from 'vue-router'
 import { testData, testPosts } from '@/testData'
 import PostList from '@/components/PostList.vue'
+import { useStore } from 'vuex'
+import { GlobalDataProps } from '@/store'
 
+const store = useStore<GlobalDataProps>()
 const route = useRoute()
 
 const currentId = +route.params.id
-// 拿到当前的column和当前的Post
-const column = testData.find(c => c.id === currentId)
-// 拿当前的posts
-const list = testPosts.filter(post => post.columnId === currentId)
+const column = store.getters.getColumnById(currentId)
+const list = store.getters.getPostsByCid(currentId)
 </script>
 
 <script lang="ts">

@@ -17,17 +17,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import GlobalHeader from '@/components/GlobalHeader.vue'
-import { testData } from '@/testData'
+import { useStore } from 'vuex'
 
-const currentUser = {
-  isLogin: true,
-  name: 'Ories1',
-  id: 1
-}
+// const currentUser = {
+//   isLogin: true,
+//   name: 'Ories1',
+//   id: 1
+// }
+
+// const currentUser = store.state.user
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
@@ -40,6 +42,10 @@ export default defineComponent({
     // ColumnList
   },
   setup () {
+    const store = useStore()
+    console.log('store', store)
+    const currentUser = computed(() => store.state.user)
+
     const inputRef = ref<any>(null)
 
     const emailVal = ref('')
