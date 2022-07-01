@@ -1,9 +1,7 @@
 <template>
   <div class="validate-input-container pb-3">
-    <!--    {{ inputRef }}-->
-    <!--    v-model="inputRef.val"-->
-
     <input
+      v-if="tag !=='textarea'"
       type="text" class="form-control"
       :class="{'is-invalid' : inputRef.error}"
       @blur="validateInput"
@@ -11,6 +9,15 @@
       @input="updateValue"
       v-bind="$attrs"
     >
+    <textarea
+      v-else
+      type="text" class="form-control"
+      :class="{'is-invalid' : inputRef.error}"
+      @blur="validateInput"
+      :value="inputRef.val"
+      @input="updateValue"
+      v-bind="$attrs"
+    ></textarea>
     <span v-if="inputRef.error" class="invalid-feedback">{{ inputRef.message }}</span>
   </div>
 
@@ -38,10 +45,15 @@ const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 //
 // type RulesProp = RuleProp[];
 
+type TagType = 'input' | 'textarea'
 const props = defineProps({
   rules: Array as PropType<RulesProp>,
   // 第一步加上modelValue
-  modelValue: String
+  modelValue: String,
+  tag: {
+    type: String as PropType<TagType>,
+    default: 'input'
+  }
 })
 
 const inputRef = reactive({
