@@ -33,17 +33,8 @@
 import { defineProps, PropType, reactive, defineEmits, ref, defineExpose, onMounted } from 'vue'
 import { emitter } from '@/mitt/mitter'
 import { RulesProp } from '@/types/commonTypes'
-// import emitter from './ValidateForm.vue'
-// $attrs
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
-
-// interface RuleProp {
-//   type: 'required' | 'email';
-//   message: string;
-// }
-//
-// type RulesProp = RuleProp[];
 
 type TagType = 'input' | 'textarea'
 const props = defineProps({
