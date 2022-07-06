@@ -36,7 +36,6 @@ export const router = createRouter({
 
 // beforeEach当导航触发，接收函数的回调，to即将去的目标，from离开的目标，next是一个函数，来让路由继续前进
 router.beforeEach((to, from, next) => {
-  console.log(to.meta)
   if (to.meta.requiredLogin && !store.state.user.isLogin) {
     next({ name: 'login' })
   } else if (to.meta.redirectAlreadyLogin && store.state.user.isLogin) {

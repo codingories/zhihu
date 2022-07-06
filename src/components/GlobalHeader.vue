@@ -21,12 +21,7 @@
 import { PropType, defineProps } from 'vue'
 import DropDown from '@/components/Dropdown.vue'
 import DropdownItem from '@/components/DropdownItem.vue'
-
-export interface UserProps {
-  isLogin: boolean;
-  name?: string;
-  id?: number;
-}
+import { UserProps } from '@/types/commonTypes'
 
 defineProps({
   user: {
