@@ -23,7 +23,7 @@ import { GlobalDataProps } from '@/store'
 const store = useStore<GlobalDataProps>()
 const route = useRoute()
 
-const currentId = +route.params.id
+const currentId = route.params.id
 const column = store.getters.getColumnById(currentId)
 const list = store.getters.getPostsByCid(currentId)
 </script>

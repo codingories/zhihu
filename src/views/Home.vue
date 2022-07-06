@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-    <h2>{{ biggerColumnLen }}</h2>
     <section class="py-5 text-center container">
       <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
@@ -26,14 +25,16 @@
 import ColumnList, { ColumnProps } from '@/components/ColumnList.vue'
 import { testData } from '@/testData'
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { GlobalDataProps } from '@/store'
 
 const store = useStore<GlobalDataProps>()
-const list = store.state.columns
-// const list = computed(() => store.state.columns)
-// const biggerColumnLen = computed(() => store.state.columns.filter(c => c.id > 2).length
-const biggerColumnLen = computed(() => store.getters.biggerColumnsLen)
+onMounted(() => {
+  // 为什么要用action，多此一举，不直接用mutations
+  // mutations只能是同步，异步必须用actions。
+  store.dispatch('fetchColumns')
+})
+const list = computed(() => store.state.columns)
 </script>
 
 <script lang="ts">
