@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { Commit, createStore } from 'vuex'
 import axios from 'axios'
 import { ColumnProps, PostProps, UserProps } from '@/types/commonTypes'
 
@@ -6,6 +6,11 @@ export interface GlobalDataProps {
   columns: ColumnProps[],
   posts: PostProps[]
   user: UserProps
+}
+
+const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
+  const { data } = await axios.get(url)
+  commit(mutationName, data)
 }
 
 const store = createStore<GlobalDataProps>({
@@ -40,21 +45,14 @@ const store = createStore<GlobalDataProps>({
     }
   },
   actions: {
-    // actions接收一个和store拥有相同属性和方法的context对象
-    fetchColumns (context) {
-      axios.get('/api/columns?currentPage=1&pageSize=5').then(res => {
-        context.commit('fetchColumns', res.data)
-      })
+    fetchColumns ({ commit }) {
+      getAndCommit('/api/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
     },
-    fetchColumn ({ commit }, cid) {
-      axios.get(`/api/columns/${cid}`).then(res => {
-        commit('fetchColumn', res.data)
-      })
+    async fetchColumn ({ commit }, cid) {
+      getAndCommit(`/api/columns/${cid}`, 'fetchColumn', commit)
     },
-    fetchPosts ({ commit }, cid) {
-      axios.get(`/api/columns/${cid}/posts`).then(res => {
-        commit('fetchPosts', res.data)
-      })
+    async fetchPosts ({ commit }, cid) {
+      getAndCommit(`/api/columns/${cid}/posts`, 'fetchPosts', commit)
     }
   },
   getters: {

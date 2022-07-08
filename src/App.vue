@@ -34,7 +34,6 @@ export default defineComponent({
   },
   setup () {
     const store = useStore()
-    console.log('store', store)
     const currentUser = computed(() => store.state.user)
 
     const inputRef = ref<any>(null)
