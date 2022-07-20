@@ -1,6 +1,10 @@
 <template>
   <div id="app" class="container">
     <GlobalHeader :user="currentUser"></GlobalHeader>
+    <!--    <h1 v-if="isLoading">-->
+    <!--      正在读取-->
+    <!--    </h1>-->
+    <my-loader text="拼命加载中" :background="'rgba(0,0,0,0.8)'" v-if="isLoading"></my-loader>
     <router-view></router-view>
     <footer class="text-center py-4 text-secondary bg-light mt-6">
       <small>
@@ -20,6 +24,7 @@
 import { computed, defineComponent, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from '@/components/GlobalHeader.vue'
+import myLoader from '@/components/myLoader.vue'
 import { useStore } from 'vuex'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
@@ -27,19 +32,15 @@ const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 export default defineComponent({
   name: 'App',
   components: {
-    // ValidateForm,
-    // ValidateInput,
+    myLoader,
     GlobalHeader
-    // ColumnList
   },
   setup () {
     const store = useStore()
     const currentUser = computed(() => store.state.user)
-
+    const isLoading = computed(() => store.state.loading)
     const inputRef = ref<any>(null)
-
     const emailVal = ref('')
-
     const emailRules = [
       {
         type: 'required',
@@ -81,7 +82,8 @@ export default defineComponent({
       emailVal,
       onFormSubmit,
       inputRef: inputRef,
-      passwordRules
+      passwordRules,
+      isLoading
     }
   }
 })
