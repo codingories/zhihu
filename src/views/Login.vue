@@ -58,10 +58,16 @@ const passwordRules: RulesProp = [
 ]
 const onFormSubmit = (result: boolean) => {
   if (result) {
-    router.push(
-      '/'
+    const payload = {
+      email: emailVal.value,
+      password: passwordVal.value
+    }
+    store.dispatch('login', payload).then(
+      data => {
+        console.log('data', data)
+        router.push('/')
+      }
     )
-    store.commit('login')
   }
 }
 </script>

@@ -15,13 +15,13 @@
   </teleport>
 </template>
 <script lang="ts" setup>
-import { defineProps, onMounted } from 'vue'
+import { defineProps, onMounted, onUnmounted } from 'vue'
 
 const node = document.createElement('div')
 node.id = 'back'
 document.body.appendChild(node)
 
-onMounted(() => {
+onUnmounted(() => {
   document.body.removeChild(node)
 })
 
