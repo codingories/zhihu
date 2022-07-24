@@ -22,7 +22,6 @@ import { computed, onMounted } from 'vue'
 
 const store = useStore<GlobalDataProps>()
 const route = useRoute()
-console.log('fuck route', route.params)
 const currentId = route.params.id
 onMounted(() => {
   store.dispatch('fetchColumn', currentId)

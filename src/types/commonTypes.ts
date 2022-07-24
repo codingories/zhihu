@@ -5,13 +5,12 @@ interface RuleProp {
 
 export type RulesProp = RuleProp[];
 
-
-
 export interface UserProps {
   isLogin: boolean;
-  name?: string;
-  id?: number;
-  columnId?: number;
+  nickName?: string;
+  _id?: string;
+  column?: number;
+  email?: string
 }
 
 interface ImageProps {

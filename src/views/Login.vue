@@ -62,12 +62,12 @@ const onFormSubmit = (result: boolean) => {
       email: emailVal.value,
       password: passwordVal.value
     }
-    store.dispatch('login', payload).then(
+    store.dispatch('loginAndFetch', payload).then(
       data => {
-        console.log('data', data)
-        router.push('/')
+        console.log('data fuck fuck', data)
       }
     )
+    router.push('/')
   }
 }
 </script>

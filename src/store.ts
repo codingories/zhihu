@@ -2,6 +2,8 @@ import { Commit, createStore } from 'vuex'
 import axios from 'axios'
 import { ColumnProps, PostProps, UserProps } from '@/types/commonTypes'
 
+axios.defaults.baseURL = '/api'
+
 export interface GlobalDataProps {
   token: string,
   loading: boolean;
@@ -28,9 +30,7 @@ const store = createStore<GlobalDataProps>({
     columns: [],
     posts: [],
     user: {
-      isLogin: false,
-      name: 'Ories',
-      columnId: 1
+      isLogin: false
     }
   },
   mutations: {
@@ -57,21 +57,35 @@ const store = createStore<GlobalDataProps>({
       state.loading = status
     },
     login (state, rawData) {
-      state.token = rawData.data.token
+      console.log('fuck rawData', rawData)
+      const { token } = rawData.data
+      state.token = token
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    },
+    fetchCurrentUser (state, rawData) {
+      state.user = { isLogin: true, ...rawData.data }
     }
   },
   actions: {
     fetchColumns ({ commit }) {
-      getAndCommit('/api/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
+      getAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
     },
     async fetchColumn ({ commit }, cid) {
-      getAndCommit(`/api/columns/${cid}`, 'fetchColumn', commit)
+      getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
     },
     async fetchPosts ({ commit }, cid) {
-      getAndCommit(`/api/columns/${cid}/posts`, 'fetchPosts', commit)
+      getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
+    },
+    fetchCurrentUser ({ commit }) {
+      getAndCommit('/user/current', 'fetchCurrentUser', commit)
     },
     login ({ commit }, payload) {
-      return postAndCommit('api/user/login', 'login', commit, payload)
+      return postAndCommit('/user/login', 'login', commit, payload)
+    },
+    loginAndFetch ({ dispatch }, loginData) {
+      return dispatch('login', loginData).then(() => {
+        return dispatch('fetchCurrentUser')
+      })
     }
   },
   getters: {
