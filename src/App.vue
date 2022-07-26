@@ -21,11 +21,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import myLoader from '@/components/myLoader.vue'
 import { useStore } from 'vuex'
+import { GlobalDataProps } from '@/store'
+import axios from 'axios'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
@@ -36,9 +38,17 @@ export default defineComponent({
     GlobalHeader
   },
   setup () {
-    const store = useStore()
+    const store = useStore<GlobalDataProps>()
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
+    const token = computed(() => store.state.token)
+    onMounted(() => {
+      if (!currentUser.value.isLogin && token.value) {
+        // eslint-disable-next-line
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`
+        store.dispatch('fetchCurrentUser')
+      }
+    })
     const inputRef = ref<any>(null)
     const emailVal = ref('')
     const emailRules = [
