@@ -66,7 +66,9 @@ const onFormSubmit = (result: boolean) => {
       data => {
         console.log('data fuck fuck', data)
       }
-    )
+    ).catch(e => {
+      console.log('fuck', e)
+    })
     router.push('/')
   }
 }

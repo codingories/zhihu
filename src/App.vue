@@ -1,6 +1,9 @@
 <template>
   <div id="app" class="container">
     <GlobalHeader :user="currentUser"></GlobalHeader>
+    <h1>
+      {{ error.message }}
+    </h1>
     <!--    <h1 v-if="isLoading">-->
     <!--      正在读取-->
     <!--    </h1>-->
@@ -42,6 +45,7 @@ export default defineComponent({
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
     const token = computed(() => store.state.token)
+    const error = computed(() => store.state.error)
     onMounted(() => {
       if (!currentUser.value.isLogin && token.value) {
         // eslint-disable-next-line
@@ -93,7 +97,8 @@ export default defineComponent({
       onFormSubmit,
       inputRef: inputRef,
       passwordRules,
-      isLoading
+      isLoading,
+      error
     }
   }
 })

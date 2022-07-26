@@ -4,8 +4,14 @@ import { ColumnProps, PostProps, UserProps } from '@/types/commonTypes'
 
 axios.defaults.baseURL = '/api'
 
+export interface GlobalErrorProps {
+  status: boolean;
+  message?: string;
+}
+
 export interface GlobalDataProps {
-  token: string,
+  error: GlobalErrorProps;
+  token: string;
   loading: boolean;
   columns: ColumnProps[],
   posts: PostProps[]
@@ -25,6 +31,7 @@ const postAndCommit = async (url: string, mutationName: string, commit: Commit, 
 
 const store = createStore<GlobalDataProps>({
   state: {
+    error: { status: false },
     token: localStorage.getItem('token') || '',
     loading: false,
     columns: [],
@@ -34,13 +41,6 @@ const store = createStore<GlobalDataProps>({
     }
   },
   mutations: {
-    // login (state) {
-    //   state.user = {
-    //     ...state.user,
-    //     isLogin: true,
-    //     name: 'Ories'
-    //   }
-    // },
     createPost (state, newPost) {
       state.posts.push(newPost)
     },
@@ -55,6 +55,9 @@ const store = createStore<GlobalDataProps>({
     },
     setLoading (state, status) {
       state.loading = status
+    },
+    setError (state, e: GlobalErrorProps) {
+      state.error = e
     },
     login (state, rawData) {
       console.log('fuck rawData', rawData)
