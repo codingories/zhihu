@@ -1,9 +1,7 @@
 <template>
   <div id="app" class="container">
     <GlobalHeader :user="currentUser"></GlobalHeader>
-    <h1>
-      {{ error.message }}
-    </h1>
+    <my-message type="error" :message="error.message" v-if="error.status"></my-message>
     <!--    <h1 v-if="isLoading">-->
     <!--      正在读取-->
     <!--    </h1>-->
@@ -31,12 +29,14 @@ import myLoader from '@/components/myLoader.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 import axios from 'axios'
+import myMessage from '@/components/myMessage.vue'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
 export default defineComponent({
   name: 'App',
   components: {
+    myMessage,
     myLoader,
     GlobalHeader
   },

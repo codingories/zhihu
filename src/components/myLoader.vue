@@ -16,14 +16,9 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, onMounted, onUnmounted } from 'vue'
+import useDOMCreate from '@/hooks/useDOMCreate'
 
-const node = document.createElement('div')
-node.id = 'back'
-document.body.appendChild(node)
-
-onUnmounted(() => {
-  document.body.removeChild(node)
-})
+useDOMCreate('back')
 
 defineProps({
   text: {

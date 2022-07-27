@@ -16,7 +16,7 @@ axios.interceptors.response.use(config => {
   console.log(e.response)
   const { error } = e.response.data
   store.commit('setError', {
-    statue: true,
+    status: true,
     message: error
   })
   store.commit('setLoading', false)
