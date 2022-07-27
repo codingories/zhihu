@@ -34,6 +34,7 @@ import ValidateInput from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import { RulesProp } from '@/types/commonTypes'
 import { useStore } from 'vuex'
+import createMessage from '@/components/createMessage'
 
 const store = useStore()
 
@@ -64,12 +65,14 @@ const onFormSubmit = (result: boolean) => {
     }
     store.dispatch('loginAndFetch', payload).then(
       data => {
-        console.log('data fuck fuck', data)
+        createMessage('登出成功 2秒后跳转首页', 'success')
+        setTimeout(() => {
+          router.push('/')
+        }, 2000)
       }
     ).catch(e => {
       console.log('fuck', e)
     })
-    router.push('/')
   }
 }
 </script>

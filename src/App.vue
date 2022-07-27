@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container">
     <GlobalHeader :user="currentUser"></GlobalHeader>
-    <my-message type="error" :message="error.message" v-if="error.status"></my-message>
+    <!--    <my-message type="error" :message="error.message" v-if="error.status"></my-message>-->
     <!--    <h1 v-if="isLoading">-->
     <!--      正在读取-->
     <!--    </h1>-->
@@ -22,21 +22,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import myLoader from '@/components/myLoader.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 import axios from 'axios'
-import myMessage from '@/components/myMessage.vue'
+import createMessage from '@/components/createMessage'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
 export default defineComponent({
   name: 'App',
   components: {
-    myMessage,
     myLoader,
     GlobalHeader
   },
@@ -46,6 +45,17 @@ export default defineComponent({
     const isLoading = computed(() => store.state.loading)
     const token = computed(() => store.state.token)
     const error = computed(() => store.state.error)
+
+    watch(() => error.value.status, () => {
+      const {
+        status,
+        message
+      } = error.value
+      if (status && message) {
+        createMessage(message, 'error')
+      }
+    })
+
     onMounted(() => {
       if (!currentUser.value.isLogin && token.value) {
         // eslint-disable-next-line

@@ -11,10 +11,10 @@
 <script lang="ts" setup>
 import { defineEmits, defineProps, onUnmounted, PropType, ref } from 'vue'
 import useDOMCreate from '@/hooks/useDOMCreate'
+import { MessageType } from '@/types/commonTypes'
 
 useDOMCreate('message')
 
-export type MessageType = 'success' | 'error' | 'default'
 const props = defineProps({
   message: String,
   type: {

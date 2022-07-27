@@ -34,3 +34,5 @@ export interface PostProps {
   createdAt: string;
   column: string;
 }
+
+export type MessageType = 'success' | 'error' | 'default'
