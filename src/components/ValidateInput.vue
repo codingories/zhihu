@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import { defineProps, PropType, reactive, defineEmits, ref, defineExpose, onMounted } from 'vue'
 import { emitter } from '@/mitt/mitter'
-import { RulesProp } from '@/types/commonTypes'
+import { RulesProp } from '@/types/com monTypes'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
@@ -78,6 +78,9 @@ const validateInput = () => {
           break
         case 'email':
           passed = emailReg.test(inputRef.val)
+          break
+        case 'custom':
+          passed = rule.validator ? rule.validator() : true
           break
         default:
           break

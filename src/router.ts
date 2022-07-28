@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue'
 import ColumnDetail from '@/components/ColumnDetail.vue'
 import CreatePost from '@/views/CreatePost.vue'
 import store from '@/store'
+import signup from '@/views/Signup.vue'
 
 const routerHistory = createWebHistory()
 export const router = createRouter({
@@ -24,6 +25,11 @@ export const router = createRouter({
       path: '/column/:id',
       name: 'column',
       component: ColumnDetail
+    },
+    {
+      path: '/signup/',
+      name: 'signup',
+      component: signup
     },
     {
       path: '/create',
