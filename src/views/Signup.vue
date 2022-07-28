@@ -1,10 +1,13 @@
 <template>
+<!--  {{ formData }}-->
+<!--  <hr>-->
+<!--  {{ email }}-->
   <div class="login-page mx-auto p-3 w-330">
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">邮箱地址</label>
         <validate-input
-          :rules="emailRules" v-model="emailVal"
+          :rules="emailRules" v-model="email"
           placeholder="请输入邮箱地址"
           type="text"
           ref="inputRef"
@@ -16,7 +19,7 @@
           type="password"
           placeholder="请输入昵称"
           :rules="nameRules"
-          v-model="passwordVal"
+          v-model="nickName"
         />
       </div>
       <div class="mb-3">
@@ -25,7 +28,7 @@
           type="password"
           placeholder="请输入密码"
           :rules="passwordRules"
-          v-model="passwordVal"
+          v-model="password"
         />
       </div>
       <div class="mb-3">
@@ -34,7 +37,7 @@
           type="password"
           placeholder="请再次输入密码"
           :rules="repeatPasswordRules"
-          v-model="passwordVal"
+          v-model="repeatPassword"
         />
       </div>
       <template #submit>
@@ -45,13 +48,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import ValidateInput from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import { RulesProp } from '@/types/commonTypes'
 import { useStore } from 'vuex'
 import createMessage from '@/components/createMessage'
+import axios from 'axios'
 
 const store = useStore()
 
@@ -62,7 +66,13 @@ const formData = reactive({
   repeatPassword: ''
 })
 
-const emailVal = ref('')
+const {
+  email,
+  nickName,
+  password,
+  repeatPassword
+} = toRefs(formData)
+
 const router = useRouter()
 const emailRules: RulesProp = [
   {
@@ -99,23 +109,23 @@ const passwordRules: RulesProp = [
     message: '密码不能为空'
   }
 ]
-const passwordVal = ref('')
 
 const onFormSubmit = (result: boolean) => {
   if (result) {
     const payload = {
-      email: emailVal.value,
-      password: passwordVal.value
+      email: email.value,
+      password: password.value,
+      nickName: nickName.value
     }
-    store.dispatch('loginAndFetch', payload).then(
-      data => {
-        createMessage('登出成功 2秒后跳转首页', 'success')
-        setTimeout(() => {
-          router.push('/')
-        }, 2000)
-      }
-    ).catch(e => {
-      console.log('fuck', e)
+    // 注册流程对全局没有任何改变，因此没有新建action。
+    axios.post('/users/', payload).then(data => {
+      createMessage('注册成功 2秒后跳转首页', 'success')
+      setTimeout(() => {
+        router.push('/login')
+      }, 2000)
+    }).catch(e => {
+      console.log(e)
+      createMessage(e, 'error')
     })
   }
 }
