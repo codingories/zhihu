@@ -1,5 +1,6 @@
 <template>
   <div class="create-post-page">
+    <input type="file" name="file" @change.prevent="handleFileChange">
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
@@ -37,6 +38,7 @@ import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 import { PostProps } from '@/testData'
 import { router } from '@/router'
+import axios from 'axios'
 
 const store = useStore<GlobalDataProps>()
 const titleRules: RulesProp = [
@@ -52,25 +54,48 @@ const contentRules: RulesProp = [
     message: '文章详情不能为空'
   }
 ]
+const contentVal = ref('')
 
 const onFormSubmit = (result: boolean) => {
   if (result) {
     console.log(result)
-    const { columnId } = store.state.user
-    if (columnId) {
+    const { column } = store.state.user
+    if (column) {
       const newPost: PostProps = {
-        id: new Date().getTime(),
         title: titleVal.value,
         content: contentVal.value,
-        columnId,
-        createdAt: new Date().toDateString()
+        column
       }
       store.commit('createPost', newPost)
-      router.push({ name: 'column', params: { id: columnId } })
+      router.push({
+        name: 'column',
+        params: { id: column }
+      })
     }
   }
 }
-const contentVal = ref('')
+
+const handleFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (files) {
+    const uploadedFile = files[0]
+    // 使用formData模拟表单的数据，参考文档: https://developer.mozilla.org/zh-CN/docs/Web/API/FormData
+    // 简单理解就是一种数据结构用于交互数据
+    const formData = new FormData()
+    formData.append(uploadedFile.name, uploadedFile)
+    // 有了表单数据就可以发送post请求,修改请求头
+    axios.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((resp: any) => {
+      console.log(resp)
+    }, fail => {
+      console.log(fail)
+    })
+  }
+}
 
 </script>
 <script lang="ts">
