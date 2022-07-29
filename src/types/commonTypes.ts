@@ -14,9 +14,10 @@ export interface UserProps {
   email?: string
 }
 
-interface ImageProps {
+export interface ImageProps {
   _id?: string;
   url?: string;
+  createdAt? :string;
 }
 
 export interface ColumnProps {
@@ -37,3 +38,9 @@ export interface PostProps {
 }
 
 export type MessageType = 'success' | 'error' | 'default'
+
+export interface ResponseType<P = {}> {
+  code: number;
+  meg: string;
+  data: P;
+}
