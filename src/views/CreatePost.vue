@@ -1,9 +1,12 @@
 <template>
   <div class="create-post-page">
-<!--    <input type="file" name="file" @change.prevent="handleFileChange">-->
+    <!--    <input type="file" name="file" @change.prevent="handleFileChange">-->
 
     <h4>新建文章</h4>
-    <my-uploader action="/upload" class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4">
+    <my-uploader action="/upload"
+                 :before-upload="uploadCheck"
+                 @file-uploaded="handleFileUploaded"
+                 class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4">
       <h2>点击上传头图</h2>
       <template #loading>
         <div class="d-flex">
@@ -49,14 +52,15 @@
 <script lang="ts" setup>
 import ValidateForm from '@/components/ValidateForm.vue'
 import ValidateInput from '@/components/ValidateInput.vue'
-import { RulesProp } from '@/types/commonTypes'
+import { ImageProps, RulesProp, ResponseType, PostProps } from '@/types/commonTypes'
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
-import { PostProps } from '@/testData'
 import { router } from '@/router'
 import axios from 'axios'
 import MyUploader from '@/components/myUploader.vue'
+import { beforeUploadCheck } from '@/helper'
+import createMessage from '@/components/createMessage'
 
 const store = useStore<GlobalDataProps>()
 const titleRules: RulesProp = [
@@ -73,22 +77,41 @@ const contentRules: RulesProp = [
   }
 ]
 const contentVal = ref('')
+let imageId = ''
+const handleFileUploaded = (rawData: ResponseType<ImageProps>) => {
+  if (rawData.data._id) {
+    imageId = rawData.data._id
+  }
+}
 
 const onFormSubmit = (result: boolean) => {
   if (result) {
     console.log(result)
-    const { column } = store.state.user
+    const {
+      column,
+      _id
+    } = store.state.user
     if (column) {
       const newPost: PostProps = {
         title: titleVal.value,
         content: contentVal.value,
-        column
+        column: column,
+        author: _id
       }
-      store.commit('createPost', newPost)
-      router.push({
-        name: 'column',
-        params: { id: column }
-      })
+      if (imageId) {
+        newPost.image = imageId
+      }
+      store.dispatch('createPost', newPost).then(
+        () => {
+          createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
+          setTimeout(() => {
+            router.push({
+              name: 'column',
+              params: { id: column }
+            })
+          }, 2000)
+        }
+      )
     }
   }
 }
@@ -115,6 +138,24 @@ const handleFileChange = (e: Event) => {
   }
 }
 
+const uploadCheck = (file: File) => {
+  const result = beforeUploadCheck(file, {
+    format: ['image/jpeg', 'image/png'],
+    size: 1
+  })
+  const {
+    passed,
+    error
+  } = result
+  if (error === 'format') {
+    createMessage('上传图片只能是 JPG/PNG 格式!', 'error')
+  }
+  if (error === 'size') {
+    createMessage('上传图片大小不能超过 1Mb!', 'error')
+  }
+  return passed
+}
+
 </script>
 <script lang="ts">
 export default {
@@ -122,11 +163,12 @@ export default {
 }
 </script>
 <style>
-.create-post-page .file-uploader-container{
+.create-post-page .file-uploader-container {
   height: 200px;
   cursor: pointer;
 }
-.create-post-page .file-uploader-container img{
+
+.create-post-page .file-uploader-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;

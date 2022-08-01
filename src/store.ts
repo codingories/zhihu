@@ -13,9 +13,9 @@ export interface GlobalDataProps {
   error: GlobalErrorProps;
   token: string;
   loading: boolean;
-  columns: ColumnProps[],
-  posts: PostProps[]
-  user: UserProps
+  columns: ColumnProps[];
+  posts: PostProps[];
+  user: UserProps;
 }
 
 const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
@@ -78,13 +78,13 @@ const store = createStore<GlobalDataProps>({
   },
   actions: {
     fetchColumns ({ commit }) {
-      getAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
+      return getAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
     },
     async fetchColumn ({ commit }, cid) {
-      getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
+      return getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
     },
     async fetchPosts ({ commit }, cid) {
-      getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
+      return getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
     },
     fetchCurrentUser ({ commit }) {
       return getAndCommit('/user/current', 'fetchCurrentUser', commit)
@@ -96,6 +96,9 @@ const store = createStore<GlobalDataProps>({
       return dispatch('login', loginData).then(() => {
         return dispatch('fetchCurrentUser')
       })
+    },
+    createPost ({ commit }, payload) {
+      return postAndCommit('/posts', 'createPost', commit, payload)
     }
   },
   getters: {
