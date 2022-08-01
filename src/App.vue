@@ -43,7 +43,7 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const currentUser = computed(() => store.state.user)
     const isLoading = computed(() => store.state.loading)
-    const token = computed(() => store.state.token)
+    // const token = computed(() => store.state.token)
     const error = computed(() => store.state.error)
 
     watch(() => error.value.status, () => {
@@ -56,13 +56,13 @@ export default defineComponent({
       }
     })
 
-    onMounted(() => {
-      if (!currentUser.value.isLogin && token.value) {
-        // eslint-disable-next-line
-        axios.defaults.headers.common.Authorization = `Bearer ${token}`
-        store.dispatch('fetchCurrentUser')
-      }
-    })
+    // onMounted(() => {
+    //   if (!currentUser.value.isLogin && token.value) {
+    //     // eslint-disable-next-line
+    //     axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    //     store.dispatch('fetchCurrentUser')
+    //   }
+    // })
     const inputRef = ref<any>(null)
     const emailVal = ref('')
     const emailRules = [
