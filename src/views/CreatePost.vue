@@ -1,6 +1,23 @@
 <template>
   <div class="create-post-page">
-    <input type="file" name="file" @change.prevent="handleFileChange">
+<!--    <input type="file" name="file" @change.prevent="handleFileChange">-->
+
+    <h4>新建文章</h4>
+    <my-uploader action="/upload" class="d-flex align-items-center justify-content-center bg-light text-secondary w-100 my-4">
+      <h2>点击上传头图</h2>
+      <template #loading>
+        <div class="d-flex">
+          <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading</span>
+          </div>
+          <h2>正在上传</h2>
+        </div>
+      </template>
+      <template #uploaded="dataProps">
+        <img :src="dataProps.uploadedData.data.url" alt="">
+      </template>
+    </my-uploader>
+
     <validate-form @form-submit="onFormSubmit">
       <div class="mb-3">
         <label class="form-label">文章标题：</label>
@@ -39,6 +56,7 @@ import { GlobalDataProps } from '@/store'
 import { PostProps } from '@/testData'
 import { router } from '@/router'
 import axios from 'axios'
+import MyUploader from '@/components/myUploader.vue'
 
 const store = useStore<GlobalDataProps>()
 const titleRules: RulesProp = [
@@ -104,5 +122,13 @@ export default {
 }
 </script>
 <style>
-
+.create-post-page .file-uploader-container{
+  height: 200px;
+  cursor: pointer;
+}
+.create-post-page .file-uploader-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>

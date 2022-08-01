@@ -9,19 +9,13 @@
             <a href="#" class="btn btn-primary my-2">开始写文章</a>
           </p>
         </div>
-        <my-uploader action="/upload" :beforeUpload="beforeUpload" :onFileUploaded="onFileUploaded"
-                     :onFileUploadedError="onFileUploadedError"
-        >
-<!--          <h2>点击上传</h2>-->
-<!--          <template #loading>-->
-<!--            <div class="spinner-border" role="status">-->
-<!--              <span class="sr-only"></span>-->
-<!--            </div>-->
+<!--        <my-uploader action="/upload" :beforeUpload="beforeUpload" :onFileUploaded="onFileUploaded"-->
+<!--                     :onFileUploadedError="onFileUploadedError"-->
+<!--        >-->
+<!--          <template #uploaded="dataProps">-->
+<!--            <img :src="dataProps.uploadedData.data.url" alt="" width="500">-->
 <!--          </template>-->
-          <template #uploaded="dataProps">
-            <img :src="dataProps.uploadedData.data.url" alt="" width="500">
-          </template>
-        </my-uploader>
+<!--        </my-uploader>-->
       </div>
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>

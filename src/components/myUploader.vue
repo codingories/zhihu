@@ -1,6 +1,6 @@
 <template>
   <div class="file-uploader">
-    <div class="file-uploader-container" @click.prevent="triggerUpload">
+    <div class="file-uploader-container" @click.prevent="triggerUpload" v-bind="$attrs">
       <slot v-if="fileStatus === 'loading'" name="loading">
         <button class="btn btn-primary disabled">正在上传...</button>
       </slot>
@@ -79,6 +79,12 @@ const handleFileChange = (e: Event) => {
       }
     })
   }
+}
+</script>
+<script lang="ts">
+// 普通 <script>, 在模块范围下执行(只执行一次)
+export default {
+  inheritAttrs: false
 }
 </script>
 

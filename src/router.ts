@@ -64,7 +64,9 @@ router.beforeEach((to, from, next) => {
         }
       ).catch(e => {
         console.error(e)
-        localStorage.removeItem('token')
+        // 这边也有一个bug
+        // localStorage.removeItem('token')
+        store.commit('logout')
         next('login')
       })
     } else {
@@ -81,12 +83,4 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
-
-  // if (to.meta.requiredLogin && !store.state.user.isLogin) {
-  //   next({ name: 'login' })
-  // } else if (to.meta.redirectAlreadyLogin && store.state.user.isLogin) {
-  //   next('/')
-  // } else {
-  //   next()
-  // }
 })
