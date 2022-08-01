@@ -1,10 +1,16 @@
 <template>
   <div class="file-uploader">
-    <button class="btn btn-primary" @click.prevent="triggerUpload">
-      <span v-if="fileStatus === 'loading'">正在上传...</span>
-      <span v-else-if="fileStatus === 'success'">上传成功</span>
-      <span v-else>点击上传</span>
-    </button>
+    <div class="file-uploader-container" @click.prevent="triggerUpload">
+      <slot v-if="fileStatus === 'loading'" name="loading">
+        <button class="btn btn-primary disabled">正在上传...</button>
+      </slot>
+      <slot v-else-if="fileStatus === 'success'" name="uploaded" :uploadedData="uploadedData">
+        <button class="btn btn-primary">上传成功</button>
+      </slot>
+      <slot v-else name="default">
+        <button class="btn btn-primary">点击上传</button>
+      </slot>
+    </div>
     <input type="file" class="file-input d-none" ref="fileInput" @change="handleFileChange">
   </div>
 </template>
@@ -24,6 +30,7 @@ const triggerUpload = () => {
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 type CheckFunction = (file: File) => boolean;
 const fileStatus = ref<UploadStatus>('ready')
+const uploadedData = ref<any>()
 // 添加状态
 const props = defineProps(
   {
@@ -57,10 +64,13 @@ const handleFileChange = (e: Event) => {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-    }).then((resp: any) => {
-      emit('file-uploaded', resp.data)
-      fileStatus.value = 'success'
-    }).catch((error) => {
+    }).then(
+      resp => {
+        emit('file-uploaded', resp.data)
+        uploadedData.value = resp.data
+        fileStatus.value = 'success'
+      }
+    ).catch((error) => {
       emit('file-uploaded-error', error)
       fileStatus.value = 'error'
     }).finally(() => {
