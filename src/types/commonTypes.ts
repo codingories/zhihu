@@ -11,7 +11,8 @@ export interface UserProps {
   nickName?: string;
   _id?: string;
   column?: string;
-  email?: string
+  email?: string;
+  avatar?: ImageProps;
 }
 
 export interface ImageProps {

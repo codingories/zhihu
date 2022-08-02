@@ -67,6 +67,13 @@ const store = createStore<GlobalDataProps>({
       localStorage.setItem('token', token)
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
     },
+    fetchPost (state, rawData) {
+      // 更新替换对应post的数据
+      const targetId = rawData.data._id
+      const oldIndex = state.posts.findIndex(c => c._id === targetId)
+      const newPost = rawData.data
+      state.posts.splice(oldIndex, 1, newPost)
+    },
     logout (state) {
       state.token = ''
       localStorage.removeItem('token')
@@ -92,6 +99,9 @@ const store = createStore<GlobalDataProps>({
     login ({ commit }, payload) {
       return postAndCommit('/user/login', 'login', commit, payload)
     },
+    fetchPost ({ commit }, id) {
+      return getAndCommit(`/posts/${id}`, 'fetchPost', commit)
+    },
     loginAndFetch ({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => {
         return dispatch('fetchCurrentUser')
@@ -107,6 +117,9 @@ const store = createStore<GlobalDataProps>({
     },
     getPostsByCid: (state) => (cid: string) => {
       return state.posts.filter(post => post.column === cid)
+    },
+    getCurrentPost: (state) => (id: string) => {
+      return state.posts.find(c => c._id === id)
     }
   }
 })
