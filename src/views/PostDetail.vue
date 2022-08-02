@@ -1,6 +1,6 @@
 <template>
   <div class="post-detail-page">
-<!--    {{ currentPost }}-->
+    <!--    {{ currentPost }}-->
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <img :src="currentImageUrl" alt="currentPost.title" class="rounded-lg img-fluid my-4" v-if="currentImageUrl">
       <h2 class="mb-4">{{ currentPost.title }}</h2>
@@ -11,6 +11,12 @@
         <span class="text-muted col text-right font-italic">发表于：{{ currentPost.createdAt }}</span>
       </div>
       <div v-html="currentHTML"></div>
+      <div v-if="showEditArea" class="btn-group mt-5">
+        <router-link type="button" class="btn btn-success" :to="{ name: 'create', query: {id: currentPost._id} }"
+        >编辑
+        </router-link>
+        <button type="button" class="btn btn-danger">删除</button>
+      </div>
     </article>
   </div>
 </template>
@@ -21,7 +27,7 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import MarkdownIt from 'markdown-it'
 import { computed, onMounted } from 'vue'
-import { ImageProps, PostProps } from '@/types/commonTypes'
+import { ImageProps, PostProps, UserProps } from '@/types/commonTypes'
 import UserProfile from '@/components/userProfile.vue'
 
 const store = useStore<GlobalDataProps>()
@@ -37,6 +43,19 @@ const currentHTML = computed(() => {
     return md.render(currentPost.value.content)
   }
   return null
+})
+
+const showEditArea = computed(() => {
+  const {
+    isLogin,
+    _id
+  } = store.state.user
+  if (currentPost.value && currentPost.value.author && isLogin) {
+    const postAuthor = currentPost.value.author as UserProps
+    return postAuthor._id === _id
+  } else {
+    return false
+  }
 })
 
 const currentImageUrl = computed(() => {
