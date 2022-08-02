@@ -30,9 +30,9 @@
 <!--})-->
 <!--</script>-->
 <script lang="ts" setup>
-import { defineProps, PropType, reactive, defineEmits, ref, defineExpose, onMounted } from 'vue'
+import { defineProps, PropType, reactive, defineEmits, defineExpose, onMounted } from 'vue'
 import { emitter } from '@/mitt/mitter'
-import { RulesProp } from '@/types/com monTypes'
+import { RulesProp } from '@/types/commonTypes'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 

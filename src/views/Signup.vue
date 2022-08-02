@@ -48,16 +48,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, toRefs } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import ValidateInput from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
 import { RulesProp } from '@/types/commonTypes'
-import { useStore } from 'vuex'
 import createMessage from '@/components/createMessage'
 import axios from 'axios'
-
-const store = useStore()
 
 const formData = reactive({
   email: '',

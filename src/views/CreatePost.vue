@@ -1,7 +1,5 @@
 <template>
   <div class="create-post-page">
-    <!--    <input type="file" name="file" @change.prevent="handleFileChange">-->
-
     <h4>新建文章</h4>
     <my-uploader action="/upload"
                  :before-upload="uploadCheck"
@@ -57,7 +55,6 @@ import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
 import { router } from '@/router'
-import axios from 'axios'
 import MyUploader from '@/components/myUploader.vue'
 import { beforeUploadCheck } from '@/helper'
 import createMessage from '@/components/createMessage'
@@ -113,28 +110,6 @@ const onFormSubmit = (result: boolean) => {
         }
       )
     }
-  }
-}
-
-const handleFileChange = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  const files = target.files
-  if (files) {
-    const uploadedFile = files[0]
-    // 使用formData模拟表单的数据，参考文档: https://developer.mozilla.org/zh-CN/docs/Web/API/FormData
-    // 简单理解就是一种数据结构用于交互数据
-    const formData = new FormData()
-    formData.append(uploadedFile.name, uploadedFile)
-    // 有了表单数据就可以发送post请求,修改请求头
-    axios.post('/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then((resp: any) => {
-      console.log(resp)
-    }, fail => {
-      console.log(fail)
-    })
   }
 }
 

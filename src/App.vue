@@ -22,13 +22,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { computed, defineComponent, reactive, ref, watch } from 'vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalHeader from '@/components/GlobalHeader.vue'
 import myLoader from '@/components/myLoader.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
-import axios from 'axios'
 import createMessage from '@/components/createMessage'
 
 const emailReg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
@@ -63,7 +62,6 @@ export default defineComponent({
     //     store.dispatch('fetchCurrentUser')
     //   }
     // })
-    const inputRef = ref<any>(null)
     const emailVal = ref('')
     const emailRules = [
       {
@@ -95,17 +93,12 @@ export default defineComponent({
         emailRef.message = 'should be valid email'
       }
     }
-    const onFormSubmit = (result: boolean) => {
-      console.log('result', inputRef.value.validateInput())
-    }
     return {
       currentUser: currentUser,
       emailRef,
       validateEmail,
       emailRules,
       emailVal,
-      onFormSubmit,
-      inputRef: inputRef,
       passwordRules,
       isLoading,
       error

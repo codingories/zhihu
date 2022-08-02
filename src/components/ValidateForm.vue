@@ -10,9 +10,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineEmits, defineProps, PropType, onUnmounted } from 'vue'
+import { defineComponent, onUnmounted } from 'vue'
 // 新建一个监听器
-import mitt from 'mitt'
 import { emitter } from '@/mitt/mitter'
 
 export default defineComponent({
@@ -27,9 +26,7 @@ export default defineComponent({
       // every, some会提前停止循环，every出现一个false最终结果就是false
       // some是有一个是true就提前停止运行
       // const result = funcArr.every(func => func())
-      console.log('funcArr', funcArr)
       const result = funcArr.map(func => func()).every(result => result)
-
       context.emit('form-submit', result)
     }
     const callback = (func?: ValidateFunc) => {

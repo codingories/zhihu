@@ -21,7 +21,7 @@
 import { defineProps, PropType } from 'vue'
 import { PostProps } from '@/types/commonTypes'
 
-const props = defineProps(
+defineProps(
   {
     list: {
       required: true,

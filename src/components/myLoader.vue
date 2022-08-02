@@ -15,7 +15,7 @@
   </teleport>
 </template>
 <script lang="ts" setup>
-import { defineProps, onMounted, onUnmounted } from 'vue'
+import { defineProps } from 'vue'
 import useDOMCreate from '@/hooks/useDOMCreate'
 
 useDOMCreate('back')

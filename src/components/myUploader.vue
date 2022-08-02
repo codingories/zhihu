@@ -30,7 +30,7 @@ const triggerUpload = () => {
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 type CheckFunction = (file: File) => boolean;
 const fileStatus = ref<UploadStatus>('ready')
-const uploadedData = ref<any>()
+const uploadedData = ref()
 // 添加状态
 const props = defineProps(
   {

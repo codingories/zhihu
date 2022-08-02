@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, onUnmounted, PropType, ref } from 'vue'
+import { defineEmits, defineProps, PropType, ref } from 'vue'
 import useDOMCreate from '@/hooks/useDOMCreate'
 import { MessageType } from '@/types/commonTypes'
 

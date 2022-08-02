@@ -9,13 +9,6 @@
             <a href="#" class="btn btn-primary my-2">开始写文章</a>
           </p>
         </div>
-<!--        <my-uploader action="/upload" :beforeUpload="beforeUpload" :onFileUploaded="onFileUploaded"-->
-<!--                     :onFileUploadedError="onFileUploadedError"-->
-<!--        >-->
-<!--          <template #uploaded="dataProps">-->
-<!--            <img :src="dataProps.uploadedData.data.url" alt="" width="500">-->
-<!--          </template>-->
-<!--        </my-uploader>-->
       </div>
     </section>
     <h4 class="font-weight-bold text-center">发现精彩</h4>
@@ -33,9 +26,6 @@ import ColumnList from '@/components/ColumnList.vue'
 import { useStore } from 'vuex'
 import { computed, onMounted } from 'vue'
 import { GlobalDataProps } from '@/store'
-import MyUploader from '@/components/myUploader.vue'
-import createMessage from '@/components/createMessage'
-import { ImageProps, ResponseType } from '@/types/commonTypes'
 
 const store = useStore<GlobalDataProps>()
 onMounted(() => {
@@ -44,22 +34,6 @@ onMounted(() => {
   store.dispatch('fetchColumns')
 })
 const list = computed(() => store.state.columns)
-const beforeUpload = (file: File) => {
-  const isJPG = file.type === 'image/jpeg'
-  if (!isJPG) {
-    createMessage('上传图片只能是 JPG 格式', 'error')
-  }
-  return isJPG
-}
-// 定义一个rawData通用的格式在types中
-const onFileUploaded = (rawData: ResponseType<ImageProps>) => {
-  createMessage(`上传图片ID ${rawData.data._id}`, 'success')
-}
-
-const onFileUploadedError = (e: Error) => {
-  console.log('错误信息', e)
-  createMessage('上传图片错误', 'error')
-}
 
 </script>
 
