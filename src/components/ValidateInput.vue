@@ -28,7 +28,7 @@
 <!--})-->
 <!--</script>-->
 <script lang="ts" setup>
-import { defineProps, PropType, reactive, defineEmits, defineExpose, onMounted, watch, computed } from 'vue'
+import { defineProps, PropType, reactive, defineEmits, defineExpose, onMounted, computed } from 'vue'
 import { emitter } from '@/mitt/mitter'
 import { RulesProp } from '@/types/commonTypes'
 

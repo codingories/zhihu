@@ -1,6 +1,6 @@
 <template>
   <div class="create-post-page">
-    <h4>新建文章</h4>
+    <h4>{{ isEditMode ? '编辑文章' : '新建文章' }}</h4>
     <my-uploader action="/upload"
                  :before-upload="uploadCheck"
                  @file-uploaded="handleFileUploaded"
@@ -41,7 +41,8 @@
         />
       </div>
       <template #submit>
-        <button class="btn btn-primary btn-large">发表文章
+        <button class="btn btn-primary btn-large">
+          {{ isEditMode ? '编辑文章' : '新建文章' }}
         </button>
       </template>
     </validate-form>
@@ -116,7 +117,9 @@ const onFormSubmit = (result: boolean) => {
       if (imageId) {
         newPost.image = imageId
       }
-      store.dispatch('createPost', newPost).then(
+      const actionName = isEditMode ? 'updatePost' : 'createPost'
+      const sendData = isEditMode ? { id: route.query.id, payload: newPost } : newPost
+      store.dispatch(actionName, sendData).then(
         () => {
           createMessage('发表成功，2秒后跳转到文章', 'success', 2000)
           setTimeout(() => {

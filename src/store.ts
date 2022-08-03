@@ -1,5 +1,5 @@
 import { Commit, createStore } from 'vuex'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { ColumnProps, PostProps, UserProps } from '@/types/commonTypes'
 
 axios.defaults.baseURL = '/api'
@@ -26,6 +26,12 @@ const getAndCommit = async (url: string, mutationName: string, commit: Commit) =
 
 const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: any) => {
   const { data } = await axios.post(url, payload)
+  commit(mutationName, data)
+  return data
+}
+
+const asyncAndCommit = async (url: string, mutationName: string, commit: Commit, config: AxiosRequestConfig = { method: 'get' }) => {
+  const { data } = await axios(url, config)
   commit(mutationName, data)
   return data
 }
@@ -81,6 +87,15 @@ const store = createStore<GlobalDataProps>({
     },
     fetchCurrentUser (state, rawData) {
       state.user = { isLogin: true, ...rawData.data }
+    },
+    updatePost (state, { data }) {
+      state.posts = state.posts.map(post => {
+        if (post._id === data._id) {
+          return data
+        } else {
+          return post
+        }
+      })
     }
   },
   actions: {
@@ -101,6 +116,15 @@ const store = createStore<GlobalDataProps>({
     },
     fetchPost ({ commit }, id) {
       return getAndCommit(`/posts/${id}`, 'fetchPost', commit)
+    },
+    updatePost ({ commit }, {
+      id,
+      payload
+    }) {
+      return asyncAndCommit(`/posts/${id}`, 'updatePost', commit, {
+        method: 'patch',
+        data: payload
+      })
     },
     loginAndFetch ({ dispatch }, loginData) {
       return dispatch('login', loginData).then(() => {
