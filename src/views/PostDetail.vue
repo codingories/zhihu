@@ -1,6 +1,11 @@
 <template>
   <div class="post-detail-page">
     <!--    {{ currentPost }}-->
+    <my-modal title="删除文章" :visible="modalIsVisible"
+              @modal-on-close="modalIsVisible=false"
+              @modal-on-confirm="modalIsVisible=false">
+      <p>确定要删除这篇文章吗？</p>
+    </my-modal>
     <article class="w-75 mx-auto mb-5 pb-3" v-if="currentPost">
       <img :src="currentImageUrl" alt="currentPost.title" class="rounded-lg img-fluid my-4" v-if="currentImageUrl">
       <h2 class="mb-4">{{ currentPost.title }}</h2>
@@ -15,7 +20,7 @@
         <router-link type="button" class="btn btn-success" :to="{ name: 'create', query: {id: currentPost._id} }"
         >编辑
         </router-link>
-        <button type="button" class="btn btn-danger">删除</button>
+        <button type="button" class="btn btn-danger" @click.prevent="modalIsVisible = true">删除</button>
       </div>
     </article>
   </div>
@@ -26,13 +31,15 @@ import { GlobalDataProps } from '@/store'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import MarkdownIt from 'markdown-it'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { ImageProps, PostProps, UserProps } from '@/types/commonTypes'
 import UserProfile from '@/components/userProfile.vue'
+import MyModal from '@/components/myModal.vue'
 
 const store = useStore<GlobalDataProps>()
 const route = useRoute()
 const currentId = route.params.id
+const modalIsVisible = ref(false)
 const md = new MarkdownIt()
 onMounted(() => {
   store.dispatch('fetchPost', currentId)
