@@ -5,8 +5,7 @@
       type="text" class="form-control"
       :class="{'is-invalid' : inputRef.error}"
       @blur="validateInput"
-      :value="inputRef.val"
-      @input="updateValue"
+      v-model="inputRef.val"
       v-bind="$attrs"
     >
     <textarea
@@ -14,8 +13,7 @@
       type="text" class="form-control"
       :class="{'is-invalid' : inputRef.error}"
       @blur="validateInput"
-      :value="inputRef.val"
-      @input="updateValue"
+      v-model="inputRef.val"
       v-bind="$attrs"
     ></textarea>
     <span v-if="inputRef.error" class="invalid-feedback">{{ inputRef.message }}</span>
@@ -30,7 +28,7 @@
 <!--})-->
 <!--</script>-->
 <script lang="ts" setup>
-import { defineProps, PropType, reactive, defineEmits, defineExpose, onMounted } from 'vue'
+import { defineProps, PropType, reactive, defineEmits, defineExpose, onMounted, watch, computed } from 'vue'
 import { emitter } from '@/mitt/mitter'
 import { RulesProp } from '@/types/commonTypes'
 
@@ -48,18 +46,17 @@ const props = defineProps({
 })
 
 const inputRef = reactive({
-  val: props.modelValue || '',
+  val: computed({
+    get: () => props.modelValue || '',
+    set: val => {
+      emit('update:modelValue', val)
+    }
+  }),
   error: false,
   message: ''
 })
 
 const emit = defineEmits(['update:modelValue'])
-
-const updateValue = (e: KeyboardEvent) => {
-  const targetValue = (e.target as HTMLInputElement).value
-  inputRef.val = targetValue
-  emit('update:modelValue', targetValue)
-}
 
 // inheritAttrs: false
 //
