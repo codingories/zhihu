@@ -18,18 +18,6 @@ export interface GlobalDataProps {
   user: UserProps;
 }
 
-const getAndCommit = async (url: string, mutationName: string, commit: Commit) => {
-  const { data } = await axios.get(url)
-  commit(mutationName, data)
-  return data
-}
-
-const postAndCommit = async (url: string, mutationName: string, commit: Commit, payload: any) => {
-  const { data } = await axios.post(url, payload)
-  commit(mutationName, data)
-  return data
-}
-
 const asyncAndCommit = async (url: string, mutationName: string, commit: Commit, config: AxiosRequestConfig = { method: 'get' }) => {
   const { data } = await axios(url, config)
   commit(mutationName, data)
@@ -100,22 +88,25 @@ const store = createStore<GlobalDataProps>({
   },
   actions: {
     fetchColumns ({ commit }) {
-      return getAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
+      return asyncAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
     },
     async fetchColumn ({ commit }, cid) {
-      return getAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
+      return asyncAndCommit(`/columns/${cid}`, 'fetchColumn', commit)
     },
     async fetchPosts ({ commit }, cid) {
-      return getAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
+      return asyncAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit)
     },
     fetchCurrentUser ({ commit }) {
-      return getAndCommit('/user/current', 'fetchCurrentUser', commit)
+      return asyncAndCommit('/user/current', 'fetchCurrentUser', commit)
     },
     login ({ commit }, payload) {
-      return postAndCommit('/user/login', 'login', commit, payload)
+      return asyncAndCommit('/user/login', 'login', commit, {
+        method: 'post',
+        data: payload
+      })
     },
     fetchPost ({ commit }, id) {
-      return getAndCommit(`/posts/${id}`, 'fetchPost', commit)
+      return asyncAndCommit(`/posts/${id}`, 'fetchPost', commit)
     },
     updatePost ({ commit }, {
       id,
@@ -132,7 +123,10 @@ const store = createStore<GlobalDataProps>({
       })
     },
     createPost ({ commit }, payload) {
-      return postAndCommit('/posts', 'createPost', commit, payload)
+      return asyncAndCommit('/posts', 'createPost', commit, {
+        method: 'post',
+        data: payload
+      })
     }
   },
   getters: {
