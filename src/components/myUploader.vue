@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits, defineProps, PropType, ref } from 'vue'
+import { defineEmits, defineProps, PropType, ref, watch } from 'vue'
 import axios from 'axios'
 
 const fileInput = ref<null | HTMLInputElement>(null)
@@ -29,8 +29,6 @@ const triggerUpload = () => {
 // 创建上传状态
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 type CheckFunction = (file: File) => boolean;
-const fileStatus = ref<UploadStatus>('ready')
-const uploadedData = ref()
 // 添加状态
 const props = defineProps(
   {
@@ -40,9 +38,22 @@ const props = defineProps(
     },
     beforeUpload: {
       type: Function as PropType<CheckFunction>
+    },
+    uploaded: {
+      type: Object
     }
   }
 )
+const fileStatus = ref<UploadStatus>(props.uploaded ? 'success' : 'ready')
+const uploadedData = ref(props.uploaded)
+// 这里使用getter function，避免报错可以参考文档
+watch(() => props.uploaded, (newValue) => {
+  if (newValue) {
+    fileStatus.value = 'success'
+    uploadedData.value = newValue
+  }
+})
+console.log('fuck props', props.uploaded)
 
 const emit = defineEmits(['file-uploaded', 'file-uploaded-error'])
 
