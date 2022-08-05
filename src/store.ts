@@ -138,8 +138,12 @@ const store = createStore<GlobalDataProps>({
       })
     },
     fetchPost ({ state, commit }, id) {
-      if (!state.posts.data[id]) {
+      const currentPost = state.posts.data[id]
+      // 加上取过id但是没content的情况也要请求
+      if (!currentPost || !currentPost.content) {
         return asyncAndCommit(`/posts/${id}`, 'fetchPost', commit)
+      } else {
+        return Promise.resolve({ data: currentPost })
       }
     },
     updatePost ({ commit }, {
