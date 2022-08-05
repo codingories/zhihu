@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a class="navbar-brand" href="#">希望专栏</a>
+    <router-link class="navbar-brand" to="/">希望专栏</router-link>
     <ul v-if="!user.isLogin" class="list-inline mb-0">
       <li class="list-inline-item">
         <router-link :to="'/login'" class="btn btn-outline-light my-2">登陆</router-link>

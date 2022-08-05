@@ -26,6 +26,7 @@ export default defineComponent({
     }
   },
   setup (props) {
+    console.log('fuck k', props)
     const columnList = computed(() => {
       return props.list.map(column => {
         if (!column.avatar) {
