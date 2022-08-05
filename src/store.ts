@@ -127,6 +127,11 @@ const store = createStore<GlobalDataProps>({
         method: 'post',
         data: payload
       })
+    },
+    deletePost ({ commit }, id) {
+      return asyncAndCommit(`/posts/${id}`, 'deletePost', commit, {
+        method: 'delete'
+      })
     }
   },
   getters: {

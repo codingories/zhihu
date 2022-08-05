@@ -24,7 +24,7 @@
 import { defineEmits, defineProps } from 'vue'
 import useDOMCreate from '@/hooks/useDOMCreate'
 
-const props = defineProps({
+defineProps({
   title: String,
   visible: {
     type: Boolean,
