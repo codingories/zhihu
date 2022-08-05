@@ -33,7 +33,7 @@ onMounted(() => {
   // mutations只能是同步，异步必须用actions。
   store.dispatch('fetchColumns')
 })
-const list = computed(() => store.state.columns)
+const list = computed(() => store.getters.getColumns)
 
 </script>
 
