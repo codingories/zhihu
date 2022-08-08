@@ -1,6 +1,8 @@
 <template>
   <div class="row">
+
     <div v-for="column in columnList" :key="column._id" class="col-4 mb-4">
+<!--      {{column}}-->
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
           <img :src="column.avatar.url" :alt="column.title" class="rounded-circle border border-light my-3">
@@ -25,8 +27,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props) {
-    console.log('fuck k', props)
+  setup: function (props) {
     const columnList = computed(() => {
       return props.list.map(column => {
         if (!column.avatar) {
@@ -34,7 +35,10 @@ export default defineComponent({
             url: require('@/assets/default.png')
           }
         } else {
-          column.avatar.url = column.avatar.url + '?x-oss-process=image/resize,m_pad,h_50,w_50'
+          const uri = '?x-oss-process=image/resize,m_pad,h_50,w_50'
+          if (!column.avatar.url?.includes(uri)) {
+            column.avatar.url = column.avatar.url + '?x-oss-process=image/resize,m_pad,h_50,w_50'
+          }
         }
         return column
       })

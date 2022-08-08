@@ -18,7 +18,7 @@ export interface GlobalDataProps {
   error: GlobalErrorProps;
   token: string;
   loading: boolean;
-  columns: { data: ListProps<ColumnProps>, isLoaded: boolean };
+  columns: { data: ListProps<ColumnProps>, isLoaded: boolean, total: number };
   posts: { data: ListProps<PostProps>, loadedColumns: Array<string> };
   user: UserProps;
 }
@@ -44,7 +44,8 @@ const store = createStore<GlobalDataProps>({
     loading: false,
     columns: {
       data: {},
-      isLoaded: false
+      isLoaded: false,
+      total: 0
     },
     posts: {
       data: {},
@@ -59,8 +60,18 @@ const store = createStore<GlobalDataProps>({
       state.posts.data[newPost._id] = newPost
     },
     fetchColumns (state, rawData) {
-      state.columns.data = arrToObj(rawData.data.list)
-      state.columns.isLoaded = true
+      const { data } = state.columns
+      const {
+        list,
+        count
+      } = rawData.data
+      state.columns = {
+        data: { ...data, ...arrToObj(list) },
+        total: count,
+        isLoaded: true
+      }
+      // state.columns.data = arrToObj(rawData.data.list)
+      // state.columns.isLoaded = true
     },
     fetchColumn (state, rawData) {
       state.columns.data[rawData.data._id] = rawData.data
@@ -107,10 +118,15 @@ const store = createStore<GlobalDataProps>({
     fetchColumns ({
       state,
       commit
-    }) {
-      if (!state.columns.isLoaded) {
-        return asyncAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
-      }
+    }, params = {}) {
+      const {
+        currentPage = 1,
+        pageSize = 6
+      } = params
+      // if (!state.columns.isLoaded) {
+      //   return asyncAndCommit('/columns?currentPage=1&pageSize=5', 'fetchColumns', commit)
+      // }
+      return asyncAndCommit(`/columns?currentPage=${currentPage}&pageSize=${pageSize}`, 'fetchColumns', commit)
     },
     async fetchColumn ({
       state,
@@ -137,7 +153,10 @@ const store = createStore<GlobalDataProps>({
         data: payload
       })
     },
-    fetchPost ({ state, commit }, id) {
+    fetchPost ({
+      state,
+      commit
+    }, id) {
       const currentPost = state.posts.data[id]
       // 加上取过id但是没content的情况也要请求
       if (!currentPost || !currentPost.content) {
@@ -174,7 +193,6 @@ const store = createStore<GlobalDataProps>({
   },
   getters: {
     getColumns: (state) => {
-      console.log('state.columns', state.columns)
       return objToArr(state.columns.data)
     },
     getColumnById: (state) => (id: string) => {
