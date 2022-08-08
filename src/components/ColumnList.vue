@@ -2,7 +2,7 @@
   <div class="row">
 
     <div v-for="column in columnList" :key="column._id" class="col-4 mb-4">
-<!--      {{column}}-->
+      <!--      {{column}}-->
       <div class="card h-100 shadow-sm">
         <div class="card-body text-center">
           <img :src="column.avatar.url" :alt="column.title" class="rounded-circle border border-light my-3">
@@ -30,6 +30,7 @@ export default defineComponent({
   setup: function (props) {
     const columnList = computed(() => {
       return props.list.map(column => {
+        // addColumnAvatar(column, 50, 50)
         if (!column.avatar) {
           column.avatar = {
             url: require('@/assets/default.png')

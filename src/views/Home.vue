@@ -31,10 +31,15 @@ import { GlobalDataProps } from '@/store'
 
 const store = useStore<GlobalDataProps>()
 const total = computed(() => store.state.columns.total)
+const currentPage = computed(() => store.state.columns.currentPage)
 onMounted(() => {
   // 为什么要用action，多此一举，不直接用mutations
   // mutations只能是同步，异步必须用actions。
-  store.dispatch('fetchColumns', { pageSize: 3 })
+  store.dispatch('fetchColumns', {
+    pageSize: 3,
+    currentPage: (currentPage.value ? currentPage.value + 1 : 2)
+  }
+  )
 })
 const list = computed(() => store.getters.getColumns)
 const {
