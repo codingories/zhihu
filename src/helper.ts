@@ -1,15 +1,13 @@
 import { ColumnProps } from '@/types/commonTypes'
 
 export function generateFitUrl (column: ColumnProps, width: number, height: number) {
-  console.log('column.avatar && column.avatar.url', column.avatar && column.avatar.url)
-
-  // if (column.avatar && column.avatar.url && column.avatar.url.indexOf('x-oss-process')) {
-  //   console.log('223344')
-  //   return
-  // }
-
   if (column.avatar) {
-    column.avatar.fitUrl = column.avatar.url + `?x-oss-process=image/resize,m_pad,h_${height},w_${width}`
+    let url
+    if (column.avatar.url) {
+      console.log('column.avatar.url.split(\'?x-oss-process=image\')', column.avatar.url.split('?x-oss-process=image'))
+      url = column.avatar.url.split('?x-oss-process=image')[0]
+    }
+    column.avatar.fitUrl = url + `?x-oss-process=image/resize,m_pad,h_${height},w_${width}`
   } else {
     column.avatar = {
       fitUrl: require('./assets/default.png')
