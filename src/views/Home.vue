@@ -2,6 +2,7 @@
   <div class="home-page">
     <section class="py-5 text-center container">
       <div class="row py-lg-5">
+<!--        {{store.state}}-->
         <div class="col-lg-6 col-md-8 mx-auto">
           <img src="../assets/callout.svg" alt="callout" class="w-50"/>
           <h2 class="font-weight-light">随心写作，自由表达</h2>

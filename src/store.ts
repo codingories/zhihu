@@ -14,12 +14,18 @@ interface ListProps<P> {
   [id: string]: P;
 }
 
+export interface LoadedPostProps {
+  columnId?: string;
+  currentPage?: number;
+  total?: number;
+}
+
 export interface GlobalDataProps {
   error: GlobalErrorProps;
   token: string;
   loading: boolean;
   columns: { data: ListProps<ColumnProps>, currentPage: number, total: number };
-  posts: { data: ListProps<PostProps>, loadedColumns: Array<string> };
+  posts: { data: ListProps<PostProps>, loadedColumns: ListProps<LoadedPostProps>; };
   user: UserProps;
 }
 
@@ -49,7 +55,7 @@ const store = createStore<GlobalDataProps>({
     },
     posts: {
       data: {},
-      loadedColumns: []
+      loadedColumns: {}
     },
     user: {
       isLogin: false
@@ -77,12 +83,29 @@ const store = createStore<GlobalDataProps>({
     fetchColumn (state, rawData) {
       state.columns.data[rawData.data._id] = rawData.data
     },
+    // fetchPosts (state, {
+    //   data: rawData,
+    //   extraData: columnId
+    // }) {
+    //   state.posts.data = { ...state.posts.data, ...arrToObj(rawData.data.list) }
+    //   state.posts.loadedColumns.push(columnId)
+    // },
     fetchPosts (state, {
       data: rawData,
       extraData: columnId
     }) {
-      state.posts.data = { ...state.posts.data, ...arrToObj(rawData.data.list) }
-      state.posts.loadedColumns.push(columnId)
+      const { data } = state.posts
+      const {
+        list,
+        count,
+        currentPage
+      } = rawData.data
+      state.posts.data = { ...data, ...arrToObj(list) }
+      state.posts.loadedColumns[columnId] = {
+        columnId: columnId,
+        total: count,
+        currentPage: currentPage * 1
+      }
     },
     fetchPost (state, rawData) {
       state.posts.data[rawData.data._id] = rawData.data
@@ -142,9 +165,21 @@ const store = createStore<GlobalDataProps>({
     async fetchPosts ({
       state,
       commit
-    }, cid) {
-      if (!state.posts.loadedColumns.includes(cid)) {
-        return asyncAndCommit(`/columns/${cid}/posts`, 'fetchPosts', commit, { method: 'get' }, cid)
+    }, params = {}) {
+      const {
+        columnId,
+        currentPage = 1,
+        pageSize = 3
+      } = params
+      const loadedPost = state.posts.loadedColumns[columnId]
+      // 如果loadedPost存在 不为 undefined
+      if (!loadedPost) {
+        return asyncAndCommit(`/columns/${columnId}/posts?currentPage=${currentPage}&pageSize=${pageSize}`, 'fetchPosts', commit, { method: 'get' }, columnId)
+      } else {
+        const loadedPostCurrentPage = loadedPost.currentPage || 0
+        if (loadedPostCurrentPage < currentPage) {
+          return asyncAndCommit(`/columns/${columnId}/posts?currentPage=${currentPage}&pageSize=${pageSize}`, 'fetchPosts', commit, { method: 'get' }, columnId)
+        }
       }
     },
     fetchCurrentUser ({ commit }) {
@@ -206,6 +241,10 @@ const store = createStore<GlobalDataProps>({
     },
     getCurrentPost: (state) => (id: string) => {
       return state.posts.data[id]
+    },
+    // 根据columnId 获得已加载的记录
+    getLoadedPost: (state) => (id: string) => {
+      return state.posts.loadedColumns[id]
     }
   }
 })
